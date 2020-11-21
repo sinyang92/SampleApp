@@ -1,6 +1,8 @@
 package com.shixiyang.sampleapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,12 +16,15 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.shixiyang.sampleapp.R;
 import com.shixiyang.sampleapp.adapters.AlbumsListAdapter;
 import com.shixiyang.sampleapp.model.Album;
 import com.shixiyang.sampleapp.model.User;
 import com.shixiyang.sampleapp.util.Service;
+import com.shixiyang.sampleapp.viewmodel.MainViewModel;
+import com.shixiyang.sampleapp.viewmodel.ThumbnailViewModel;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -37,26 +42,24 @@ public class ThumbnailActivity extends AppCompatActivity {
 
     private static final String TAG = ThumbnailActivity.class.getName();
     private static final String BASE_URL = "https://jsonplaceholder.typicode.com/";
-    private String id;
     private ListView albumsListView;
-    private ArrayList<HashMap<String, String>> albumsList;
+    private ThumbnailViewModel thumbnailViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thumbnail);
-
-        albumsList = new ArrayList<>();
+        thumbnailViewModel = ViewModelProviders.of(this).get(ThumbnailViewModel.class);
         albumsListView = findViewById(R.id.list_albums);
 
         //Get clicked id from MainActivity
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            id = extras.getString("id");
+            thumbnailViewModel.userId = extras.getString("id");
         }
 
-        this.setTitle("Album ID: " + id);
+        this.setTitle("Album ID: " + thumbnailViewModel.userId);
         getAlbumsInfo();
     }
 
@@ -65,7 +68,7 @@ public class ThumbnailActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         Service service = retrofit.create(Service.class);
-        Call<List<Album>> albumsCall = service.getAlbums(id);
+        Call<List<Album>> albumsCall = service.getAlbums(thumbnailViewModel.userId);
 
         albumsCall.enqueue(new Callback<List<Album>>() {
             @Override
@@ -83,12 +86,12 @@ public class ThumbnailActivity extends AppCompatActivity {
                     map.put("title", album.getTitle());
                     map.put("url", album.getUrl());
                     map.put("thumbnailUrl", album.getThumbnailUrl());
-                    albumsList.add(map);
+                    thumbnailViewModel.albumsList.add(map);
                 }
 
-                if (albumsList.size() > 0) {
+                if (thumbnailViewModel.albumsList.size() > 0) {
                     //Update ListView
-                    AlbumsListAdapter adapter = new AlbumsListAdapter(albumsList, getApplicationContext());
+                    AlbumsListAdapter adapter = new AlbumsListAdapter(thumbnailViewModel.albumsList, getApplicationContext());
                     albumsListView.setAdapter(adapter);
 
                     //Set onClick Listener
@@ -109,7 +112,7 @@ public class ThumbnailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Album>> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), "Failed to get user info: " + t.getMessage(), Toast.LENGTH_LONG);
             }
         });
     }
