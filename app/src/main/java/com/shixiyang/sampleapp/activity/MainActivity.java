@@ -1,5 +1,6 @@
 package com.shixiyang.sampleapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String BASE_URL = "https://jsonplaceholder.typicode.com/";
     private ListView usersListView;
-    ArrayList<HashMap<String, String>> usersList;
+    private ArrayList<HashMap<String, String>> usersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,17 @@ public class MainActivity extends AppCompatActivity {
                         new int[]{R.id.text_id, R.id.text_name, R.id.text_email, R.id.text_phone}
                 );
                 usersListView.setAdapter(adapter);
+
+                //Set onClick Listener
+                usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(getApplicationContext(), ThumbnailActivity.class);
+                        HashMap<String, String> selectedUser = (HashMap<String, String>) adapter.getItem(position);
+                        intent.putExtra("id", selectedUser.get("id"));
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override
