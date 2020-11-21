@@ -9,18 +9,22 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
 
         <ImageView
             android:id="@+id/image_photo"
-            android:layout_width="600dp"
-            android:layout_height="600dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="400dp" />
 
         <TextView
             android:id="@+id/text_album_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
             android:textSize="30sp"
             android:background="#4472c4"
             android:textColor="@color/white" />
