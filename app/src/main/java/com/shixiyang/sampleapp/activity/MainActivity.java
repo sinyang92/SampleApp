@@ -43,10 +43,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         usersList = new ArrayList<>();
         usersListView = findViewById(R.id.list_users);
+        getUsersInfo();
+    }
 
+    public void getUsersInfo() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -71,23 +73,25 @@ public class MainActivity extends AppCompatActivity {
                     usersList.add(map);
                 }
 
-                //Update ListView
-                ListAdapter adapter = new SimpleAdapter(
-                        MainActivity.this, usersList, R.layout.list_item_user, new String[]{"id", "name", "email", "phone"},
-                        new int[]{R.id.text_id, R.id.text_name, R.id.text_email, R.id.text_phone}
-                );
-                usersListView.setAdapter(adapter);
+                if (usersList.size() > 0) {
+                    //Update ListView
+                    ListAdapter adapter = new SimpleAdapter(
+                            MainActivity.this, usersList, R.layout.list_item_user, new String[]{"id", "name", "email", "phone"},
+                            new int[]{R.id.text_id, R.id.text_name, R.id.text_email, R.id.text_phone}
+                    );
+                    usersListView.setAdapter(adapter);
 
-                //Set onClick Listener
-                usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(getApplicationContext(), ThumbnailActivity.class);
-                        HashMap<String, String> selectedUser = (HashMap<String, String>) adapter.getItem(position);
-                        intent.putExtra("id", selectedUser.get("id"));
-                        startActivity(intent);
-                    }
-                });
+                    //Set onClick Listener
+                    usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(getApplicationContext(), ThumbnailActivity.class);
+                            HashMap<String, String> selectedUser = (HashMap<String, String>) adapter.getItem(position);
+                            intent.putExtra("id", selectedUser.get("id"));
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
 
             @Override
@@ -95,27 +99,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

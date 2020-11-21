@@ -73,7 +73,6 @@ public class AlbumsListAdapter extends ArrayAdapter<HashMap<String, String>> {
         viewHolder.textTitle.setText(map.get("title"));
         //Load image using Glide
         String thumbnailUrl = this.albums.get(position).get("thumbnailUrl");
-        Log.d(TAG, "thumbnailUrl -> " + thumbnailUrl);
         GlideUrl url = new GlideUrl(thumbnailUrl, new LazyHeaders.Builder()
                 .addHeader("User-Agent", "your-user-agent")
                 .build());

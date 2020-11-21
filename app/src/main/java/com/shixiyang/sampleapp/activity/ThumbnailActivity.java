@@ -57,7 +57,10 @@ public class ThumbnailActivity extends AppCompatActivity {
         }
 
         this.setTitle("Album ID: " + id);
+        getAlbumsInfo();
+    }
 
+    public void getAlbumsInfo() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -80,27 +83,28 @@ public class ThumbnailActivity extends AppCompatActivity {
                     map.put("title", album.getTitle());
                     map.put("url", album.getUrl());
                     map.put("thumbnailUrl", album.getThumbnailUrl());
-                    Log.d("albumId -> ", Integer.toString((album.getAlbumId())));
                     albumsList.add(map);
                 }
 
-                //Update ListView
-                AlbumsListAdapter adapter = new AlbumsListAdapter(albumsList, getApplicationContext());
-                albumsListView.setAdapter(adapter);
+                if (albumsList.size() > 0) {
+                    //Update ListView
+                    AlbumsListAdapter adapter = new AlbumsListAdapter(albumsList, getApplicationContext());
+                    albumsListView.setAdapter(adapter);
 
-                //Set onClick Listener
-                albumsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(getApplicationContext(), PhotoActivity.class);
-                        HashMap<String, String> selectedThumbnail = (HashMap<String, String>) adapter.getItem(position);
-                        intent.putExtra("id", selectedThumbnail.get("id"));
-                        intent.putExtra("albumId", selectedThumbnail.get("albumId"));
-                        intent.putExtra("title", selectedThumbnail.get("title"));
-                        intent.putExtra("url", selectedThumbnail.get("url"));
-                        startActivity(intent);
-                    }
-                });
+                    //Set onClick Listener
+                    albumsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(getApplicationContext(), PhotoActivity.class);
+                            HashMap<String, String> selectedThumbnail = (HashMap<String, String>) adapter.getItem(position);
+                            intent.putExtra("id", selectedThumbnail.get("id"));
+                            intent.putExtra("albumId", selectedThumbnail.get("albumId"));
+                            intent.putExtra("title", selectedThumbnail.get("title"));
+                            intent.putExtra("url", selectedThumbnail.get("url"));
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
 
             @Override
