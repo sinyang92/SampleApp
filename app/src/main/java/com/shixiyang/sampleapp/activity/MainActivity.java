@@ -40,6 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private static final String BASE_URL = "https://jsonplaceholder.typicode.com/";
+    private static final String USER_INFO = "User Info";
     private ListView usersListView;
     private MainViewModel mainViewModel;
 
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle(USER_INFO);
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         usersListView = findViewById(R.id.list_users);
         getUsersInfo();
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Failed to get user info: " + t.getMessage(), Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "Failed to get user info: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -52,15 +52,20 @@ public class ThumbnailActivity extends AppCompatActivity {
         thumbnailViewModel = ViewModelProviders.of(this).get(ThumbnailViewModel.class);
         albumsListView = findViewById(R.id.list_albums);
 
-        //Get clicked id from MainActivity
-        Bundle extras = getIntent().getExtras();
+        if (thumbnailViewModel.userId == null) {
+            //Get clicked id from MainActivity
+            Bundle extras = getIntent().getExtras();
 
-        if (extras != null) {
-            thumbnailViewModel.userId = extras.getString("id");
+            if (extras != null) {
+                thumbnailViewModel.userId = extras.getString("id");
+            }
         }
 
         this.setTitle("Album ID: " + thumbnailViewModel.userId);
-        getAlbumsInfo();
+
+        if (thumbnailViewModel.albumsList.size() == 0) {
+            getAlbumsInfo();
+        }
     }
 
     public void getAlbumsInfo() {
