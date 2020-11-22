@@ -14,24 +14,26 @@
         android:theme="@style/Theme.SampleApp">
 
         <activity android:name=".activity.PhotoActivity"
-            android:theme="@style/Theme.AppCompat.DayNight">
-<!--            <meta-data-->
-<!--                android:name="android.support.PARENT_ACTIVITY"-->
-<!--                android:value=".activity.ThumbnailActivity" />-->
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ThumbnailActivity" />
         </activity>
 
         <activity
             android:name=".activity.ThumbnailActivity"
-            android:theme="@style/Theme.AppCompat.DayNight">
-<!--            <meta-data-->
-<!--                android:name="android.support.PARENT_ACTIVITY"-->
-<!--                android:value=".activity.MainActivity" />-->
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
         </activity>
 
         <activity
             android:name=".activity.MainActivity"
-            android:label="User Info"
-            android:theme="@style/Theme.AppCompat.DayNight">
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
